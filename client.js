@@ -6,7 +6,7 @@ const App = () => {
     const [wsError, setWsError] = useState(null);
 
     useEffect(() => {
-        const ws = new WebSocket('wss://your-server-domain:3000'); // Ensure you use 'wss://' for secure WebSocket
+        const ws = new WebSocket('wss://127.0.0.1:9000');  // Fixed: closed string
 
         ws.onopen = () => {
             console.log('Connected to WebSocket');

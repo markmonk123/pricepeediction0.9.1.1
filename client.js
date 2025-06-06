@@ -6,34 +6,48 @@ const App = () => {
     const [wsError, setWsError] = useState(null);
 
     useEffect(() => {
-        const ws = new WebSocket('wss://your-server-domain:3000'); // Ensure you use 'wss://' for secure WebSocket
+        // Use environment variable for WebSocket URL, default to localhost:9000
+        const wsUrl = process.env.REACT_APP_WEBSOCKET_URL || 'wss://127.0.0.1:9000';
+        let ws; // Declare ws outside the try block
 
-        ws.onopen = () => {
-            console.log('Connected to WebSocket');
-            setWsError(null);
-        };
+        try {
+            ws = new WebSocket(wsUrl);
 
-        ws.onmessage = (event) => {
-            try {
-                const data = JSON.parse(event.data);
-                setMarketData((prevData) => [...prevData, data]); // Append new data
-                console.log('Received market data:', data);
-            } catch (err) {
-                console.error('Error parsing WebSocket data:', err);
-            }
-        };
+            ws.onopen = () => {
+                console.log('Connected to WebSocket');
+                setWsError(null);
+            };
 
-        ws.onerror = (err) => {
-            console.error('WebSocket error:', err);
-            setWsError('WebSocket connection error. Please try again later.');
-        };
+            ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    setMarketData((prevData) => [...prevData, data]); // Append new data
+                    console.log('Received market data:', data);
+                } catch (err) {
+                    console.error('Error parsing WebSocket data:', err);
+                    setWsError('Error parsing data from WebSocket.');
+                }
+            };
 
-        ws.onclose = () => {
-            console.log('WebSocket connection closed');
-        };
+            ws.onerror = (err) => {
+                console.error('WebSocket error:', err);
+                setWsError(`WebSocket connection error: ${err.message}.  Check server and certificate.`);
+            };
+
+            ws.onclose = () => {
+                console.log('WebSocket connection closed');
+                setWsError('WebSocket connection closed.');
+            };
+        } catch (error) {
+            console.error('WebSocket initialization error:', error);
+            setWsError(`Failed to initialize WebSocket: ${error.message}`);
+            return; // Prevent further execution if WebSocket fails to initialize
+        }
 
         return () => {
-            ws.close(); // Close WebSocket connection on cleanup
+            if (ws) {
+                ws.close(); // Close WebSocket connection on cleanup
+            }
         };
     }, []);
 

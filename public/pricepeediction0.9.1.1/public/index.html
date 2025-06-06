@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cryptocurrency Price Prediction Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    #container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      width: 100vw;
+    }
+    #top-frame {
+      height: 50%;
+      width: 100%;
+      border-bottom: 2px solid #ccc;
+      box-sizing: border-box;
+    }
+    #bottom-row {
+      display: flex;
+      height: 50%;
+      width: 100%;
+    }
+    .bottom-frame {
+      width: 50%;
+      height: 100%;
+      border-right: 2px solid #ccc;
+      box-sizing: border-box;
+    }
+    .bottom-frame:last-child {
+      border-right: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="top-frame">
+      <!-- Top frame: Combined graph -->
+      <div id="combined-graph"></div>
+    </div>
+    <div id="bottom-row">
+      <div class="bottom-frame" id="market-data-frame">
+        <!-- Bottom left: Real-time & historical market data -->
+      </div>
+      <div class="bottom-frame" id="prediction-frame">
+        <!-- Bottom right: Future price predictions -->
+      </div>
+    </div>
+  </div>
+  <!-- Your React bundle -->
+  <script src="bundle.js"></script>
+</body>
+</html>
